@@ -11,7 +11,7 @@ namespace Tickets1.Models
     public class usuarios
     {
         [Key]
-        public int id_usuarios { get; set; }
+        public int? id_usuarios { get; set; }
         public string? nombre { get; set; }
         public string? apellido { get; set; }
         public string? correo { get; set; }

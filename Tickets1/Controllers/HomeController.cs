@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace DulceSabor.Controllers
             _context = context;
         }
 
-        // Vista inicial de login
+        // Vista de inicio de sesión
         public IActionResult Login()
         {
             return View();  // Muestra la vista Login.cshtml
@@ -26,7 +26,7 @@ namespace DulceSabor.Controllers
 
         // Método POST para validar usuario y contraseña
         [HttpPost]
-        public async Task<IActionResult> LoginUsuario(string correo, string contrasenia, string returnUrl)
+        public async Task<IActionResult> LoginUsuario(string correo, string contrasenia)
         {
             // Verificar si los campos no están vacíos
             if (string.IsNullOrEmpty(correo) || string.IsNullOrEmpty(contrasenia))
@@ -35,9 +35,9 @@ namespace DulceSabor.Controllers
                 return View("Login");
             }
 
-            // Buscar el usuario en la base de datos utilizando correo y contraseña
+            // Asegúrate de que el tipo de datos sea correcto
             var usuario = await _context.usuarios
-                .Include(u => u.roles)  // Incluir el rol del usuario
+                .Include(u => u.roles)  // Incluir el rol
                 .FirstOrDefaultAsync(u =>
                     u.correo.ToLower() == correo.ToLower() &&
                     u.contrasenia == contrasenia);  // Verificar la contraseña
@@ -49,7 +49,7 @@ namespace DulceSabor.Controllers
                 return View("Login");
             }
 
-            // Verifica que el usuario tiene un rol asignado
+            // Verificar que el usuario tiene un rol asignado
             if (usuario.roles == null)
             {
                 ViewBag.Error = "Usuario sin rol asignado.";
@@ -73,7 +73,6 @@ namespace DulceSabor.Controllers
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-
                 // Si no hay ReturnUrl, redirige al AdminController
                 return RedirectToAction("Index", "Admin");  // Redirige al AdminController
             }
@@ -83,11 +82,17 @@ namespace DulceSabor.Controllers
         }
 
 
-
         // Acción Index común
         public IActionResult Index()
         {
             return View();  // Página de inicio común
+        }
+
+        // Cerrar sesión
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();  // Limpiar la sesión
+            return RedirectToAction("Login");  // Redirigir al login
         }
     }
 }

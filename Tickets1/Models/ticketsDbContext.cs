@@ -18,7 +18,16 @@ namespace Tickets1.Models
         public DbSet<notificaciones> notificaciones { get; set; }
         public DbSet<historial> historial { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<usuarios>()
+                .HasOne(u => u.roles)  // Relación uno a muchos
+                .WithMany()  // No es necesario especificar una propiedad de navegación en roles_t porque es una relación simple
+                .HasForeignKey(u => u.id_roles);
+        }
     }
+
+
 
 }
 
