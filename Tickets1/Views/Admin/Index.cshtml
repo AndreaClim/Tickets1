@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Tickets1.Models.tickets>
+
+@{
+    ViewData["Title"] = "Dashboard de Administración";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Bienvenido al Dashboard de Administración</p>
+
+<!-- Aquí puedes agregar más contenido específico para la vista de administración -->
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th scope="col">ID Ticket</th>
+            <th scope="col">Título</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Técnico Asignado</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in Model)
+        {
+            <tr>
+                <td>@ticket.id_ticket</td>
+                <td>@ticket.titulo</td>
+                <td>@ticket.usuarioCliente.nombre</td>
+                <td>@ticket.usuarioEmpleado.nombre</td>
+                <td>@ticket.estados.nombre</td>
+                <td>
+                    <a href="@Url.Action("Detalles", "Admin", new { id = ticket.id_ticket })" class="btn btn-info">Ver</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

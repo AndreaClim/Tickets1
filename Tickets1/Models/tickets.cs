@@ -31,10 +31,13 @@ namespace Tickets1.Models
         public virtual ICollection<comentarios> comentarios { get; set; }
         public virtual ICollection<archivo_t> archivost { get; set; }
 
-        public int id_usuarioE { get; set; }
-        public int id_cat { get; set; }
-        public int id_estado { get; set; }
-        public int id_prioridad { get; set; }
+        public int? id_usuarioE { get; set; }
+        public int? id_usuarioC { get; set; }
+        public int? id_cat { get; set; }
+        public int? id_estado { get; set; }
+        public int? id_prioridad { get; set; }
+
+
 
     }
 }
